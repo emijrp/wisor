@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+#
+# Wisor - Licenciado bajo GPL 2.0
+#
 
 import os
 import wx
@@ -9,6 +12,7 @@ class MainWindow(wx.Frame):
 	def __init__(self,parent,id,title):
 		wx.Frame.__init__(self,parent,wx.ID_ANY, title, size = (500,500))
 		self.control = wx.TextCtrl(self, 1, style=wx.TE_MULTILINE)
+		self.control.SetValue(net.fetch("Portada"))
 		self.CreateStatusBar() # creando barra de estado
 		# parametros del menu
 		filemenu= wx.Menu()
@@ -23,7 +27,7 @@ class MainWindow(wx.Frame):
 		wx.EVT_MENU(self, ID_EXIT, self.OnExit)   # evento para Salida
 		self.Show(True)
 	def OnAbout(self,e):
-		d= wx.MessageDialog( self, " A sample editor \n in wxPython","About Sample Editor", wx.OK)
+		d= wx.MessageDialog( self, "Wisor ALPHA","Acerca de...", wx.OK)
 		# creando caja de dialogo
 		d.ShowModal() # la mostramos
 		d.Destroy() # la destruimos al finalizar
