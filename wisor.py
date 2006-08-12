@@ -1,3 +1,4 @@
+import os
 import wx
 ID_ABOUT=101
 ID_EXIT=110
@@ -15,7 +16,16 @@ class MainWindow(wx.Frame):
         menuBar = wx.MenuBar()
         menuBar.Append(filemenu,"&Archivo") # añadimos menu a la barra
         self.SetMenuBar(menuBar)  # añadimos la barra a la ventana
-        self.Show(True)
+		wx.EVT_MENU(self, ID_ABOUT, self.OnAbout) # evento para Acerca de...
+		wx.EVT_MENU(self, ID_EXIT, self.OnExit)   # evento para Salida
+		self.Show(True)
+	def OnAbout(self,e):
+		d= wx.MessageDialog( self, " A sample editor \n in wxPython","About Sample Editor", wx.OK)
+		# creando caja de dialogo
+		d.ShowModal() # la mostramos
+		d.Destroy() # la destruimos al finalizar
+	def OnExit(self,e):
+		self.Close(True)  #cerramos la ventana
 app = wx.PySimpleApp()
 frame = MainWindow(None, -1, "Wisor")
 app.MainLoop()
