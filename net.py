@@ -7,7 +7,6 @@ import urllib, urllib2, httplib
 def pageText(url):
     request=urllib2.Request(url)
     user_agent='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.12) Gecko/20050915 Firefox/1.0.7'
-    #print url
     request.add_header("User-Agent", user_agent)
     response=urllib2.urlopen(request)
     text=response.read()
