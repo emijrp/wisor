@@ -7,9 +7,10 @@ import net #paquete local
 def create(parent):
     return Frame1(parent)
 
-[wxID_FRAME1, wxID_FRAME1BUTTON1, wxID_FRAME1STATICTEXT1, 
+[wxID_FRAME1, wxID_FRAME1BUTTON1, wxID_FRAME1BUTTON2, wxID_FRAME1BUTTON3, 
+ wxID_FRAME1STATICTEXT1, wxID_FRAME1STATICTEXT2, wxID_FRAME1STATICTEXT3, 
  wxID_FRAME1TEXTCTRL1, wxID_FRAME1TEXTCTRL2, 
-] = [wx.NewId() for _init_ctrls in range(5)]
+] = [wx.NewId() for _init_ctrls in range(9)]
 
 [wxID_FRAME1MENUFILEITEMS0] = [wx.NewId() for _init_coll_menuFile_Items in range(1)]
 
@@ -53,34 +54,59 @@ class Frame1(wx.Frame):
     def _init_ctrls(self, prnt):
         # generated method, don't edit
         wx.Frame.__init__(self, id=wxID_FRAME1, name='', parent=prnt,
-              pos=wx.Point(66, 49), size=wx.Size(725, 480),
-              style=wx.DEFAULT_FRAME_STYLE, title=u'Wisor 0.01 (Alpha)')
+              pos=wx.Point(30, 18), size=wx.Size(993, 719),
+              style=wx.RESIZE_BORDER | wx.MAXIMIZE_BOX | wx.MAXIMIZE | wx.DEFAULT_FRAME_STYLE,
+              title=u'Wisor 0.01 (Alpha)')
         self._init_utils()
-        self.SetClientSize(wx.Size(717, 446))
+        self.SetClientSize(wx.Size(985, 685))
         self.SetMenuBar(self.menuBar1)
+        self.SetAutoLayout(False)
+        self.Center(wx.BOTH)
 
         self.textCtrl1 = wx.TextCtrl(id=wxID_FRAME1TEXTCTRL1, name='textCtrl1',
-              parent=self, pos=wx.Point(240, 40), size=wx.Size(464, 368),
+              parent=self, pos=wx.Point(240, 48), size=wx.Size(728, 600),
               style=wx.TE_MULTILINE | wx.TE_READONLY | wx.DOUBLE_BORDER,
-              value=u'Ning\xfan art\xedculo por ahora')
+              value=u'')
+        self.textCtrl1.SetAutoLayout(False)
 
         self.textCtrl2 = wx.TextCtrl(id=wxID_FRAME1TEXTCTRL2, name='textCtrl2',
-              parent=self, pos=wx.Point(8, 8), size=wx.Size(168, 21), style=0,
+              parent=self, pos=wx.Point(8, 48), size=wx.Size(224, 21), style=0,
               value=u'Buscar...')
         self.textCtrl2.Bind(wx.EVT_TEXT_ENTER, self.OnTextCtrl2TextEnter,
               id=wxID_FRAME1TEXTCTRL2)
 
         self.button1 = wx.Button(id=wxID_FRAME1BUTTON1, label=u'OK',
-              name='button1', parent=self, pos=wx.Point(184, 8),
+              name='button1', parent=self, pos=wx.Point(184, 80),
               size=wx.Size(43, 23), style=0)
         self.button1.Bind(wx.EVT_BUTTON, self.OnButton1Button,
               id=wxID_FRAME1BUTTON1)
 
         self.staticText1 = wx.StaticText(id=wxID_FRAME1STATICTEXT1,
-              label=u'Desconocido', name='staticText1', parent=self,
-              pos=wx.Point(240, 8), size=wx.Size(94, 21), style=0)
+              label=u'Portada', name='staticText1', parent=self,
+              pos=wx.Point(240, 8), size=wx.Size(57, 21), style=0)
         self.staticText1.SetFont(wx.Font(13, wx.SWISS, wx.NORMAL, wx.NORMAL,
               False, u'MS Shell Dlg 2'))
+
+        self.staticText2 = wx.StaticText(id=wxID_FRAME1STATICTEXT2,
+              label=u'De Wikipedia, la enciclopedia libre', name='staticText2',
+              parent=self, pos=wx.Point(240, 32), size=wx.Size(160, 13),
+              style=0)
+
+        self.staticText3 = wx.StaticText(id=wxID_FRAME1STATICTEXT3,
+              label=u'Consulta', name='staticText3', parent=self,
+              pos=wx.Point(8, 30), size=wx.Size(49, 16), style=0)
+        self.staticText3.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.NORMAL,
+              False, u'MS Shell Dlg 2'))
+
+        self.button2 = wx.Button(id=wxID_FRAME1BUTTON2, label=u'Aleatorio',
+              name='button2', parent=self, pos=wx.Point(120, 80),
+              size=wx.Size(56, 23), style=0)
+
+        self.button3 = wx.Button(id=wxID_FRAME1BUTTON3, label=u'Borrar',
+              name='button3', parent=self, pos=wx.Point(8, 80), size=wx.Size(56,
+              23), style=0)
+        self.button3.Bind(wx.EVT_BUTTON, self.OnButton3Button,
+              id=wxID_FRAME1BUTTON3)
 
     def __init__(self, parent):
         self._init_ctrls(parent)
@@ -107,4 +133,7 @@ class Frame1(wx.Frame):
         #muestra caja de dialogo para Acerca de...
         d=wx.MessageDialog(self, "Wisor 0.01 (Alpha)", "Acerca de...", wx.OK)
         d.ShowModal()
-        #d.Destroy()
+        d.Destroy()
+
+    def OnButton3Button(self, event):
+        self.textCtrl2.SetValue("Buscar...")
