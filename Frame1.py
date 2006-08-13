@@ -2,7 +2,7 @@
 #Boa:Frame:Frame1
 
 import wx
-import net #paquete local
+import Page #paquete local
 
 def create(parent):
     return Frame1(parent)
@@ -110,20 +110,26 @@ class Frame1(wx.Frame):
 
     def __init__(self, parent):
         self._init_ctrls(parent)
+	self.p = Page.Page() #Página
+
+
+
+	# MANEJO DE EVENTOS
+
 
     def OnButton1Button(self, event):
         #carga el articulo escrito en el campo Buscar al pulsar OK
-        articulo=self.textCtrl2.GetValue()
-        self.staticText1.SetLabel(articulo)
-        contenido=net.fetch(articulo)
-        self.textCtrl1.SetValue(contenido)
+	self.cargaArticulo(self.textCtrl2.GetValue())
+
 
     def OnTextCtrl2TextEnter(self, event):
         #carga el articulo escrito en el campo Buscar al pulsar Intro
-        articulo=self.textCtrl2.GetValue()
-        self.staticText1.SetLabel(articulo)
-        contenido=net.fetch(articulo)
-        self.textCtrl1.SetValue(contenido)
+	self.cargaArticulo(self.textCtrl2.GetValue())
+	
+    def cargaArticulo(self,title):
+        self.staticText1.SetLabel(title)
+        self.p.changePage(title)
+        self.textCtrl1.SetValue(self.p.getText())
 
     def OnMenuFileItems0Menu(self, event):
         #sale del programa
