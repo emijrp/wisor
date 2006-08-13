@@ -1,0 +1,13 @@
+Lista de los cambios producidos en cada versión.
+
+
+----------------------------------------------------------------
+
+Versión 0.01 (Alpha)
+
+*Interfaz básica con Boa
+
+*Carga artículos como "Portada" o "Web". Artículos con espacios en el nombre,
+o que contengan carácteres extraños en el contenido no son cargados.
+
+----------------------------------------------------------------
