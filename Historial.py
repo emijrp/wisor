@@ -11,6 +11,7 @@ class Historial:
 	*guarda
 	*dame(n=10)
 	*push()
+	*limpia()
 	TODO: Parser de la salida directamente en la clase
 	TODO: Función para borrar el archivo
 	TODO: Borramos a partir de la consulta n?(100 por ejemplo) son innecesarias
@@ -58,4 +59,11 @@ class Historial:
 		self.lista.reverse()
 		self.lista.append(que)
 		self.lista.reverse()
+		self.guarda()
+		
+	def limpia(self):
+		"""
+		Limpia la lista del histórico de búsquedas
+		"""
+		self.lista=[]
 		self.guarda()
