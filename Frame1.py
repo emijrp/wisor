@@ -151,7 +151,7 @@ class Frame1(wx.Frame):
         self._init_ctrls(parent)
 	self.p = Page.Page() #Página
 	self.h = Historial.Historial()
-
+	thread.start_new_thread(self.cargaArticulo,("Portada",))
 
 
 	# MANEJO DE EVENTOS
@@ -159,13 +159,15 @@ class Frame1(wx.Frame):
 
     def OnButton1LeftUp(self, event):
         #carga el articulo escrito en el campo Buscar al pulsar OK
-        thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))
+        if self.textCtrl2.GetValue()!="Buscar...":
+			thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))
         event.Skip()
 
     def OnTextCtrl2TextEnter(self, event):
         #carga el articulo escrito en el campo Buscar al pulsar Intro
-        thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))
-        event.Skip()
+		if self.textCtrl2.GetValue()!="Buscar...":
+			thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))
+		event.Skip()
         
     def OnButton3Button(self, event):
         #vacia el campo Consulta
