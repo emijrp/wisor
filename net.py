@@ -6,6 +6,7 @@
 #TODO: detectar 404s
 #TODO: detectar Redirecciones
 #TODO: función para mostrar los Special:Prefixindex
+#TODO: el Special:Random
 
 
 import urllib, urllib2, httplib

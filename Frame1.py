@@ -3,17 +3,17 @@
 
 import wx,thread,re,time
 import wx.html
-import Page,Historial #paquete local
+import Page,Historial,query #paquete local
 
 def create(parent):
     return Frame1(parent)
 
 [wxID_FRAME1, wxID_FRAME1BUTTON1, wxID_FRAME1BUTTON2, wxID_FRAME1BUTTON3, 
  wxID_FRAME1BUTTON4, wxID_FRAME1HTMLWINDOW1, wxID_FRAME1LISTBOX1, 
- wxID_FRAME1STATICBOX1, wxID_FRAME1STATICBOX2, wxID_FRAME1STATICBOX3, 
- wxID_FRAME1STATICTEXT1, wxID_FRAME1STATICTEXT2, wxID_FRAME1STATUSBAR1, 
- wxID_FRAME1TEXTCTRL1, wxID_FRAME1TEXTCTRL2, 
-] = [wx.NewId() for _init_ctrls in range(15)]
+ wxID_FRAME1LISTBOX2, wxID_FRAME1STATICBOX1, wxID_FRAME1STATICBOX2, 
+ wxID_FRAME1STATICBOX3, wxID_FRAME1STATICTEXT1, wxID_FRAME1STATICTEXT2, 
+ wxID_FRAME1STATUSBAR1, wxID_FRAME1TEXTCTRL1, wxID_FRAME1TEXTCTRL2, 
+] = [wx.NewId() for _init_ctrls in range(16)]
 
 [wxID_FRAME1MENUFILEITEMS0] = [wx.NewId() for _init_coll_menuFile_Items in range(1)]
 
@@ -65,7 +65,7 @@ class Frame1(wx.Frame):
     def _init_ctrls(self, prnt):
         # generated method, don't edit
         wx.Frame.__init__(self, id=wxID_FRAME1, name='', parent=prnt,
-              pos=wx.Point(171, 121), size=wx.Size(688, 512),
+              pos=wx.Point(307, 173), size=wx.Size(688, 512),
               style=wx.RESIZE_BORDER | wx.MAXIMIZE_BOX | wx.MAXIMIZE | wx.DEFAULT_FRAME_STYLE,
               title=u'Wisor 0.01 (Alpha)')
         self._init_utils()
@@ -87,6 +87,8 @@ class Frame1(wx.Frame):
               parent=self, pos=wx.Point(16, 32), size=wx.Size(208, 21), style=0,
               value=u'Buscar...')
         self.textCtrl2.Bind(wx.EVT_TEXT_ENTER, self.OnTextCtrl2TextEnter,
+              id=wxID_FRAME1TEXTCTRL2)
+        self.textCtrl2.Bind(wx.EVT_TEXT, self.OnTextCtrl2Text,
               id=wxID_FRAME1TEXTCTRL2)
 
         self.button1 = wx.Button(id=wxID_FRAME1BUTTON1, label=u'OK',
@@ -147,6 +149,11 @@ class Frame1(wx.Frame):
               size=wx.Size(208, 80), style=0)
         self.listBox1.Bind(wx.EVT_LEFT_UP, self.OnListBox1LeftUp)
 
+        self.listBox2 = wx.ListBox(choices=[], id=wxID_FRAME1LISTBOX2,
+              name='listBox2', parent=self, pos=wx.Point(16, 136),
+              size=wx.Size(208, 120), style=0)
+        self.listBox2.Bind(wx.EVT_LEFT_UP, self.OnListBox2LeftUp)
+
     def __init__(self, parent):
         self._init_ctrls(parent)
 	self.p = Page.Page() #Página
@@ -191,11 +198,10 @@ class Frame1(wx.Frame):
         palabras=0
         caracteres=0
         #actualiza historial de consultas
-        self.listBox1.InsertItems(self.h.dame(), 0)
-        #barra de estado
-        status=u'Artículo cargado en %s segundos | Bytes: %s | Líneas: %s | Palabras: %s | Caracteres: %s ' % (time.time()-t, self.p.getLen(), lineas, palabras, caracteres)
-        self.statusBar1.SetStatusText(number=0, text=status)
-
+	self.listBox1.InsertItems(self.h.dame(), 0)
+	#barra de estado
+	status=u'Artículo cargado en %s segundos | Bytes: %s | Líneas: %s | Palabras: %s | Caracteres: %s ' % (time.time()-t, self.p.getLen(), lineas, palabras, caracteres)
+	self.statusBar1.SetStatusText(number=0, text=status)
 
     def OnMenuFileItems0Menu(self, event):
         #sale del programa
@@ -218,6 +224,21 @@ class Frame1(wx.Frame):
 		#pinchando en el historial.... si pincha en blanco no hace nada
         if self.listBox1.GetStringSelection():
 			self.textCtrl2.SetValue(self.listBox1.GetStringSelection())
+			thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))			
+        event.Skip()
+
+    def OnTextCtrl2Text(self, event):
+        #cargamos lista de encontrados
+        encontrados=[]
+        self.listBox2.Set("", )
+        encontrados=query.fetchQuery(self.textCtrl2.GetValue(),"es","wikipedia")
+        self.listBox2.InsertItems(encontrados, 0)
+        event.Skip()
+
+    def OnListBox2LeftUp(self, event):
+        #pinchando en encontrados.... si pincha en blanco no hace nada
+        if self.listBox2.GetStringSelection():
+			self.textCtrl2.SetValue(self.listBox2.GetStringSelection())
 			thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))			
         event.Skip()
         
