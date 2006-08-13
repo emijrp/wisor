@@ -189,7 +189,7 @@ class Frame1(wx.Frame):
         palabras=0
         caracteres=0
         #actualiza historial de consultas
-        self.listBox1.InsertItems(title, 0)
+        self.listBox1.InsertItems(self.h.dame(), 0)
         #barra de estado
         status=u'Artículo cargado en %s segundos | Bytes: %s | Líneas: %s | Palabras: %s | Caracteres: %s ' % (time.time()-t, self.p.getLen(), lineas, palabras, caracteres)
         self.statusBar1.SetStatusText(number=0, text=status)
@@ -207,11 +207,15 @@ class Frame1(wx.Frame):
         event.Skip()
         
     def OnButton4Button(self, event):
-        self.htmlWindow2.SetPage("")
-        event.Skip()
+		#vacia el historial y se carga el archivo
+			self.listBox1.Set("", )
+			self.h.limpia()
+			event.Skip()
 
     def OnListBox1LeftUp(self, event):
-        self.textCtrl2.SetValue(self.listBox1.GetStringSelection())
-        thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))
+		#pinchando en el historial.... si pincha en blanco no hace nada
+        if self.listBox1.GetStringSelection():
+			self.textCtrl2.SetValue(self.listBox1.GetStringSelection())
+			thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))			
         event.Skip()
         
