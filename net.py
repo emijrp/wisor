@@ -2,6 +2,12 @@
 #
 # Funciones hacer peticiones de red
 #
+
+#TODO: detectar 404s
+#TODO: detectar Redirecciones
+#TODO: función para mostrar los Special:Prefixindex
+
+
 import urllib, urllib2, httplib
 
 def pageText(url):
