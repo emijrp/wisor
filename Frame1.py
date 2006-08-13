@@ -8,9 +8,11 @@ def create(parent):
     return Frame1(parent)
 
 [wxID_FRAME1, wxID_FRAME1BUTTON1, wxID_FRAME1BUTTON2, wxID_FRAME1BUTTON3, 
- wxID_FRAME1STATICTEXT1, wxID_FRAME1STATICTEXT2, wxID_FRAME1STATICTEXT3, 
- wxID_FRAME1TEXTCTRL1, wxID_FRAME1TEXTCTRL2, 
-] = [wx.NewId() for _init_ctrls in range(9)]
+ wxID_FRAME1BUTTON4, wxID_FRAME1SCROLLEDWINDOW1, wxID_FRAME1STATICBOX1, 
+ wxID_FRAME1STATICBOX2, wxID_FRAME1STATICBOX3, wxID_FRAME1STATICTEXT1, 
+ wxID_FRAME1STATICTEXT2, wxID_FRAME1STATUSBAR1, wxID_FRAME1TEXTCTRL1, 
+ wxID_FRAME1TEXTCTRL2, 
+] = [wx.NewId() for _init_ctrls in range(14)]
 
 [wxID_FRAME1MENUFILEITEMS0] = [wx.NewId() for _init_coll_menuFile_Items in range(1)]
 
@@ -39,6 +41,14 @@ class Frame1(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnMenuFileItems0Menu,
               id=wxID_FRAME1MENUFILEITEMS0)
 
+    def _init_coll_statusBar1_Fields(self, parent):
+        # generated method, don't edit
+        parent.SetFieldsCount(1)
+
+        parent.SetStatusText(number=0, text=u'status')
+
+        parent.SetStatusWidths([-1])
+
     def _init_utils(self):
         # generated method, don't edit
         self.menuFile = wx.Menu(title=u'Archivo')
@@ -54,7 +64,7 @@ class Frame1(wx.Frame):
     def _init_ctrls(self, prnt):
         # generated method, don't edit
         wx.Frame.__init__(self, id=wxID_FRAME1, name='', parent=prnt,
-              pos=wx.Point(30, 18), size=wx.Size(993, 719),
+              pos=wx.Point(19, 12), size=wx.Size(993, 719),
               style=wx.RESIZE_BORDER | wx.MAXIMIZE_BOX | wx.MAXIMIZE | wx.DEFAULT_FRAME_STYLE,
               title=u'Wisor 0.01 (Alpha)')
         self._init_utils()
@@ -62,21 +72,22 @@ class Frame1(wx.Frame):
         self.SetMenuBar(self.menuBar1)
         self.SetAutoLayout(False)
         self.Center(wx.BOTH)
+        self.SetStatusBarPane(0)
 
         self.textCtrl1 = wx.TextCtrl(id=wxID_FRAME1TEXTCTRL1, name='textCtrl1',
-              parent=self, pos=wx.Point(240, 48), size=wx.Size(728, 600),
+              parent=self, pos=wx.Point(240, 56), size=wx.Size(728, 576),
               style=wx.TE_MULTILINE | wx.TE_READONLY | wx.DOUBLE_BORDER,
               value=u'')
         self.textCtrl1.SetAutoLayout(False)
 
         self.textCtrl2 = wx.TextCtrl(id=wxID_FRAME1TEXTCTRL2, name='textCtrl2',
-              parent=self, pos=wx.Point(8, 48), size=wx.Size(224, 21), style=0,
+              parent=self, pos=wx.Point(16, 32), size=wx.Size(208, 21), style=0,
               value=u'Buscar...')
         self.textCtrl2.Bind(wx.EVT_TEXT_ENTER, self.OnTextCtrl2TextEnter,
               id=wxID_FRAME1TEXTCTRL2)
 
         self.button1 = wx.Button(id=wxID_FRAME1BUTTON1, label=u'OK',
-              name='button1', parent=self, pos=wx.Point(184, 80),
+              name='button1', parent=self, pos=wx.Point(176, 64),
               size=wx.Size(43, 23), style=0)
         self.button1.Bind(wx.EVT_BUTTON, self.OnButton1Button,
               id=wxID_FRAME1BUTTON1)
@@ -92,21 +103,42 @@ class Frame1(wx.Frame):
               parent=self, pos=wx.Point(240, 32), size=wx.Size(160, 13),
               style=0)
 
-        self.staticText3 = wx.StaticText(id=wxID_FRAME1STATICTEXT3,
-              label=u'Consulta', name='staticText3', parent=self,
-              pos=wx.Point(8, 30), size=wx.Size(49, 16), style=0)
-        self.staticText3.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.NORMAL,
-              False, u'MS Shell Dlg 2'))
-
         self.button2 = wx.Button(id=wxID_FRAME1BUTTON2, label=u'Aleatorio',
-              name='button2', parent=self, pos=wx.Point(120, 80),
+              name='button2', parent=self, pos=wx.Point(112, 64),
               size=wx.Size(56, 23), style=0)
 
         self.button3 = wx.Button(id=wxID_FRAME1BUTTON3, label=u'Borrar',
-              name='button3', parent=self, pos=wx.Point(8, 80), size=wx.Size(56,
-              23), style=0)
+              name='button3', parent=self, pos=wx.Point(16, 600),
+              size=wx.Size(56, 23), style=0)
         self.button3.Bind(wx.EVT_BUTTON, self.OnButton3Button,
               id=wxID_FRAME1BUTTON3)
+
+        self.statusBar1 = wx.StatusBar(id=wxID_FRAME1STATUSBAR1,
+              name='statusBar1', parent=self, style=0)
+        self._init_coll_statusBar1_Fields(self.statusBar1)
+        self.SetStatusBar(self.statusBar1)
+
+        self.staticBox1 = wx.StaticBox(id=wxID_FRAME1STATICBOX1,
+              label=u'Historial de consultas', name='staticBox1', parent=self,
+              pos=wx.Point(8, 488), size=wx.Size(224, 140), style=0)
+
+        self.staticBox2 = wx.StaticBox(id=wxID_FRAME1STATICBOX2,
+              label=u'Consulta', name='staticBox2', parent=self, pos=wx.Point(8,
+              8), size=wx.Size(224, 88), style=0)
+
+        self.staticBox3 = wx.StaticBox(id=wxID_FRAME1STATICBOX3,
+              label=u'Encontrados', name='staticBox3', parent=self,
+              pos=wx.Point(8, 112), size=wx.Size(224, 360), style=0)
+
+        self.button4 = wx.Button(id=wxID_FRAME1BUTTON4, label=u'Borrar',
+              name='button4', parent=self, pos=wx.Point(16, 64),
+              size=wx.Size(56, 23), style=0)
+        self.button4.Bind(wx.EVT_BUTTON, self.OnButton3Button,
+              id=wxID_FRAME1BUTTON4)
+
+        self.scrolledWindow1 = wx.ScrolledWindow(id=wxID_FRAME1SCROLLEDWINDOW1,
+              name='scrolledWindow1', parent=self, pos=wx.Point(16, 128),
+              size=wx.Size(208, 336), style=wx.HSCROLL | wx.VSCROLL)
 
     def __init__(self, parent):
         self._init_ctrls(parent)
@@ -121,7 +153,10 @@ class Frame1(wx.Frame):
         #carga el articulo escrito en el campo Buscar al pulsar OK
 	thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))
 
-
+    def OnButton3Button(self, event):
+        #vacia el campo Consulta
+        self.textCtrl2.SetValue("Buscar...")
+        
     def OnTextCtrl2TextEnter(self, event):
         #carga el articulo escrito en el campo Buscar al pulsar Intro
 	thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))
@@ -130,6 +165,9 @@ class Frame1(wx.Frame):
         self.staticText1.SetLabel(title)
         self.p.changePage(title)
         self.textCtrl1.SetValue(self.p.getText())
+        tiempocarga=2
+        status=u'Artículo cargado en %s segundos | Líneas: | Palabras: | Caracteres: ' % tiempocarga
+        self.statusBar1.SetStatusText(number=0, text=status)
 
     def OnMenuFileItems0Menu(self, event):
         #sale del programa
@@ -140,6 +178,3 @@ class Frame1(wx.Frame):
         d=wx.MessageDialog(self, "Wisor 0.01 (Alpha)", "Acerca de...", wx.OK)
         d.ShowModal()
         d.Destroy()
-
-    def OnButton3Button(self, event):
-        self.textCtrl2.SetValue("Buscar...")
