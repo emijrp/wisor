@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 #Boa:Frame:Frame1
 
-import re
-import wx,thread
+import wx,thread,re,time
 import wx.html
-import Page #paquete local
+import Page,Historial #paquete local
 
 def create(parent):
     return Frame1(parent)
@@ -150,6 +149,7 @@ class Frame1(wx.Frame):
     def __init__(self, parent):
         self._init_ctrls(parent)
 	self.p = Page.Page() #Página
+	self.h = Historial.Historial()
 
 
 
@@ -169,6 +169,8 @@ class Frame1(wx.Frame):
 	thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))
 
     def cargaArticulo(self,title):
+	t=time.time()
+	self.h.push(title)
         self.staticText1.SetLabel(title)
         self.p.changePage(title)
         texto=self.p.getText()
@@ -179,17 +181,18 @@ class Frame1(wx.Frame):
         html=re.sub(ur"\n", ur"<br />", html)
         #rellenamos htmlarea
         self.htmlWindow1.SetPage(html)
-        tiempocarga=2
         lineas=0
         palabras=0
         caracteres=0
-        #barra de estado
-        status=u'Artículo cargado en %s segundos | Líneas: %s | Palabras: %s | Caracteres: %s ' % (tiempocarga, lineas, palabras, caracteres)
-        self.statusBar1.SetStatusText(number=0, text=status)
         #actualiza historial de consultas
-        historial=self.htmlWindow2.ToText()
-        historial="<a href=\""+title+"\">"+title+"</a><br />"+historial
+	historial=u""
+	for i in self.h.dame():
+        	historial+=u"<li>%s</il><br />" % (i)
         self.htmlWindow2.SetPage(historial)
+        #barra de estado
+        status=u'Artículo cargado en %s segundos | Bytes: %s | Líneas: %s | Palabras: %s | Caracteres: %s ' % (time.time()-t, self.p.getLen(), lineas, palabras, caracteres)
+        self.statusBar1.SetStatusText(number=0, text=status)
+
 
     def OnMenuFileItems0Menu(self, event):
         #sale del programa
