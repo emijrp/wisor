@@ -168,7 +168,7 @@ class Frame1(wx.Frame):
         #carga el articulo escrito en el campo Buscar al pulsar Intro
 	thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))
 
-	def cargaArticulo(self,title):
+    def cargaArticulo(self,title):
         self.staticText1.SetLabel(title)
         self.p.changePage(title)
         texto=self.p.getText()
