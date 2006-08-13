@@ -65,11 +65,11 @@ class Frame1(wx.Frame):
     def _init_ctrls(self, prnt):
         # generated method, don't edit
         wx.Frame.__init__(self, id=wxID_FRAME1, name='', parent=prnt,
-              pos=wx.Point(30, 18), size=wx.Size(993, 719),
+              pos=wx.Point(171, 121), size=wx.Size(688, 512),
               style=wx.RESIZE_BORDER | wx.MAXIMIZE_BOX | wx.MAXIMIZE | wx.DEFAULT_FRAME_STYLE,
               title=u'Wisor 0.01 (Alpha)')
         self._init_utils()
-        self.SetClientSize(wx.Size(985, 685))
+        self.SetClientSize(wx.Size(680, 478))
         self.SetMenuBar(self.menuBar1)
         self.SetAutoLayout(False)
         self.Center(wx.BOTH)
@@ -78,7 +78,7 @@ class Frame1(wx.Frame):
         self.SetBackgroundColour(wx.Colour(188, 188, 188))
 
         self.textCtrl1 = wx.TextCtrl(id=wxID_FRAME1TEXTCTRL1, name='textCtrl1',
-              parent=self, pos=wx.Point(240, 56), size=wx.Size(728, 272),
+              parent=self, pos=wx.Point(240, 56), size=wx.Size(432, 184),
               style=wx.TE_MULTILINE | wx.TE_READONLY | wx.DOUBLE_BORDER,
               value=u'')
         self.textCtrl1.SetAutoLayout(False)
@@ -122,7 +122,7 @@ class Frame1(wx.Frame):
 
         self.staticBox1 = wx.StaticBox(id=wxID_FRAME1STATICBOX1,
               label=u'Historial de consultas', name='staticBox1', parent=self,
-              pos=wx.Point(8, 488), size=wx.Size(224, 140), style=0)
+              pos=wx.Point(8, 280), size=wx.Size(224, 140), style=0)
 
         self.staticBox2 = wx.StaticBox(id=wxID_FRAME1STATICBOX2,
               label=u'Consulta', name='staticBox2', parent=self, pos=wx.Point(8,
@@ -130,20 +130,20 @@ class Frame1(wx.Frame):
 
         self.staticBox3 = wx.StaticBox(id=wxID_FRAME1STATICBOX3,
               label=u'Encontrados', name='staticBox3', parent=self,
-              pos=wx.Point(8, 112), size=wx.Size(224, 360), style=0)
+              pos=wx.Point(8, 112), size=wx.Size(224, 152), style=0)
 
         self.button4 = wx.Button(id=wxID_FRAME1BUTTON4, label=u'Borrar',
-              name='button4', parent=self, pos=wx.Point(16, 600),
+              name='button4', parent=self, pos=wx.Point(16, 392),
               size=wx.Size(56, 23), style=0)
         self.button4.Bind(wx.EVT_BUTTON, self.OnButton4Button,
               id=wxID_FRAME1BUTTON4)
 
         self.htmlWindow1 = wx.html.HtmlWindow(id=wxID_FRAME1HTMLWINDOW1,
-              name='htmlWindow1', parent=self, pos=wx.Point(240, 336),
-              size=wx.Size(728, 288), style=wx.html.HW_SCROLLBAR_AUTO)
+              name='htmlWindow1', parent=self, pos=wx.Point(240, 248),
+              size=wx.Size(432, 168), style=wx.html.HW_SCROLLBAR_AUTO)
 
         self.listBox1 = wx.ListBox(choices=[], id=wxID_FRAME1LISTBOX1,
-              name='listBox1', parent=self, pos=wx.Point(16, 512),
+              name='listBox1', parent=self, pos=wx.Point(16, 304),
               size=wx.Size(208, 80), style=0)
         self.listBox1.Bind(wx.EVT_LEFT_UP, self.OnListBox1LeftUp)
 
