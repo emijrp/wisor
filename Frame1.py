@@ -9,7 +9,7 @@ def create(parent):
     return Frame1(parent)
 
 [wxID_FRAME1, wxID_FRAME1BUTTON1, wxID_FRAME1BUTTON2, wxID_FRAME1BUTTON3, 
- wxID_FRAME1BUTTON4, wxID_FRAME1HTMLWINDOW1, wxID_FRAME1HTMLWINDOW2, 
+ wxID_FRAME1BUTTON4, wxID_FRAME1HTMLWINDOW1, wxID_FRAME1LISTBOX1, 
  wxID_FRAME1STATICBOX1, wxID_FRAME1STATICBOX2, wxID_FRAME1STATICBOX3, 
  wxID_FRAME1STATICTEXT1, wxID_FRAME1STATICTEXT2, wxID_FRAME1STATUSBAR1, 
  wxID_FRAME1TEXTCTRL1, wxID_FRAME1TEXTCTRL2, 
@@ -74,6 +74,8 @@ class Frame1(wx.Frame):
         self.SetAutoLayout(False)
         self.Center(wx.BOTH)
         self.SetStatusBarPane(0)
+        self.SetForegroundColour(wx.Colour(0, 0, 0))
+        self.SetBackgroundColour(wx.Colour(188, 188, 188))
 
         self.textCtrl1 = wx.TextCtrl(id=wxID_FRAME1TEXTCTRL1, name='textCtrl1',
               parent=self, pos=wx.Point(240, 56), size=wx.Size(728, 272),
@@ -90,8 +92,7 @@ class Frame1(wx.Frame):
         self.button1 = wx.Button(id=wxID_FRAME1BUTTON1, label=u'OK',
               name='button1', parent=self, pos=wx.Point(176, 64),
               size=wx.Size(43, 23), style=0)
-        self.button1.Bind(wx.EVT_BUTTON, self.OnButton1Button,
-              id=wxID_FRAME1BUTTON1)
+        self.button1.Bind(wx.EVT_LEFT_UP, self.OnButton1LeftUp)
 
         self.staticText1 = wx.StaticText(id=wxID_FRAME1STATICTEXT1,
               label=u'Portada', name='staticText1', parent=self,
@@ -141,10 +142,10 @@ class Frame1(wx.Frame):
               name='htmlWindow1', parent=self, pos=wx.Point(240, 336),
               size=wx.Size(728, 288), style=wx.html.HW_SCROLLBAR_AUTO)
 
-        self.htmlWindow2 = wx.html.HtmlWindow(id=wxID_FRAME1HTMLWINDOW2,
-              name='htmlWindow2', parent=self, pos=wx.Point(16, 512),
-              size=wx.Size(208, 80),
-              style=wx.VSCROLL | wx.html.HW_SCROLLBAR_AUTO)
+        self.listBox1 = wx.ListBox(choices=[], id=wxID_FRAME1LISTBOX1,
+              name='listBox1', parent=self, pos=wx.Point(16, 512),
+              size=wx.Size(208, 80), style=0)
+        self.listBox1.Bind(wx.EVT_LEFT_UP, self.OnListBox1LeftUp)
 
     def __init__(self, parent):
         self._init_ctrls(parent)
@@ -156,18 +157,21 @@ class Frame1(wx.Frame):
 	# MANEJO DE EVENTOS
 
 
-    def OnButton1Button(self, event):
+    def OnButton1LeftUp(self, event):
         #carga el articulo escrito en el campo Buscar al pulsar OK
-	thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))
+        thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))
+        event.Skip()
 
+    def OnTextCtrl2TextEnter(self, event):
+        #carga el articulo escrito en el campo Buscar al pulsar Intro
+        thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))
+        event.Skip()
+        
     def OnButton3Button(self, event):
         #vacia el campo Consulta
         self.textCtrl2.SetValue("Buscar...")
-        
-    def OnTextCtrl2TextEnter(self, event):
-        #carga el articulo escrito en el campo Buscar al pulsar Intro
-	thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))
-
+        event.Skip()
+            
     def cargaArticulo(self,title):
 	t=time.time()
 	self.h.push(title)
@@ -185,10 +189,7 @@ class Frame1(wx.Frame):
         palabras=0
         caracteres=0
         #actualiza historial de consultas
-	historial=u""
-	for i in self.h.dame():
-        	historial+=u"<li>%s</il><br />" % (i)
-        self.htmlWindow2.SetPage(historial)
+        self.listBox1.InsertItems(title, 0)
         #barra de estado
         status=u'Artículo cargado en %s segundos | Bytes: %s | Líneas: %s | Palabras: %s | Caracteres: %s ' % (time.time()-t, self.p.getLen(), lineas, palabras, caracteres)
         self.statusBar1.SetStatusText(number=0, text=status)
@@ -203,6 +204,14 @@ class Frame1(wx.Frame):
         d=wx.MessageDialog(self, "Wisor 0.01 (Alpha)", "Acerca de...", wx.OK)
         d.ShowModal()
         d.Destroy()
-
+        event.Skip()
+        
     def OnButton4Button(self, event):
         self.htmlWindow2.SetPage("")
+        event.Skip()
+
+    def OnListBox1LeftUp(self, event):
+        self.textCtrl2.SetValue(self.listBox1.GetStringSelection())
+        thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))
+        event.Skip()
+        
