@@ -56,6 +56,9 @@ class Historial:
 		"""
 		Añade un elemento al principio de la lista y guarda la lista en el fichero
 		"""
+		if que in self.lista:
+			while que in self.lista:
+				self.lista.remove(que)
 		self.lista.reverse()
 		self.lista.append(que)
 		self.lista.reverse()

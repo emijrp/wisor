@@ -8,6 +8,8 @@ import wx,thread,re,time
 import wx.html
 import Page,Historial,net,parse #paquete local
 
+import urllib2
+
 def create(parent):
     return Frame1(parent)
 
@@ -192,7 +194,13 @@ class Frame1(wx.Frame):
         t=time.time()
         self.h.push(title)
         self.staticText1.SetLabel(title)
-        self.p.changePage(title)
+	try:
+        	self.p.changePage(title)
+	except urllib2.HTTPError:
+		d=wx.MessageDialog(self, u"A tomar por culo ya ostia", u"Yo he venido aquí a hablar de mi libro", wx.OK)
+        	d.ShowModal()
+        	d.Destroy()
+		return
         texto=self.p.getText()
         #rellenamos textarea
         self.textCtrl1.SetValue(texto)
