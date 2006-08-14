@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 #Boa:Frame:Frame1
 
+#TODO no consultar a cada letra, esperar un segundo a que el usuario pare de escribir
+#TODO pasar la primera letra del campo consulta a mayuscula con upper()
+
 import wx,thread,re,time
 import wx.html
 import Page,Historial,query #paquete local
@@ -65,11 +68,10 @@ class Frame1(wx.Frame):
     def _init_ctrls(self, prnt):
         # generated method, don't edit
         wx.Frame.__init__(self, id=wxID_FRAME1, name='', parent=prnt,
-              pos=wx.Point(307, 173), size=wx.Size(688, 512),
-              style=wx.RESIZE_BORDER | wx.MAXIMIZE_BOX | wx.MAXIMIZE | wx.DEFAULT_FRAME_STYLE,
-              title=u'Wisor 0.01 (Alpha)')
+              pos=wx.Point(320, 175), size=wx.Size(663, 508),
+              style=wx.DEFAULT_FRAME_STYLE, title=u'Wisor 0.01 (Alpha)')
         self._init_utils()
-        self.SetClientSize(wx.Size(680, 478))
+        self.SetClientSize(wx.Size(655, 474))
         self.SetMenuBar(self.menuBar1)
         self.SetAutoLayout(False)
         self.Center(wx.BOTH)
@@ -78,9 +80,8 @@ class Frame1(wx.Frame):
         self.SetBackgroundColour(wx.Colour(188, 188, 188))
 
         self.textCtrl1 = wx.TextCtrl(id=wxID_FRAME1TEXTCTRL1, name='textCtrl1',
-              parent=self, pos=wx.Point(240, 56), size=wx.Size(432, 184),
-              style=wx.TE_MULTILINE | wx.TE_READONLY | wx.DOUBLE_BORDER,
-              value=u'')
+              parent=self, pos=wx.Point(248, 56), size=wx.Size(400, 168),
+              style=wx.TE_MULTILINE | wx.TE_READONLY, value=u'')
         self.textCtrl1.SetAutoLayout(False)
 
         self.textCtrl2 = wx.TextCtrl(id=wxID_FRAME1TEXTCTRL2, name='textCtrl2',
@@ -98,13 +99,13 @@ class Frame1(wx.Frame):
 
         self.staticText1 = wx.StaticText(id=wxID_FRAME1STATICTEXT1,
               label=u'Portada', name='staticText1', parent=self,
-              pos=wx.Point(240, 8), size=wx.Size(57, 21), style=0)
+              pos=wx.Point(248, 8), size=wx.Size(57, 21), style=0)
         self.staticText1.SetFont(wx.Font(13, wx.SWISS, wx.NORMAL, wx.NORMAL,
               False, u'MS Shell Dlg 2'))
 
         self.staticText2 = wx.StaticText(id=wxID_FRAME1STATICTEXT2,
               label=u'De Wikipedia, la enciclopedia libre', name='staticText2',
-              parent=self, pos=wx.Point(240, 32), size=wx.Size(160, 13),
+              parent=self, pos=wx.Point(248, 32), size=wx.Size(160, 13),
               style=0)
 
         self.button2 = wx.Button(id=wxID_FRAME1BUTTON2, label=u'Aleatorio',
@@ -141,8 +142,9 @@ class Frame1(wx.Frame):
               id=wxID_FRAME1BUTTON4)
 
         self.htmlWindow1 = wx.html.HtmlWindow(id=wxID_FRAME1HTMLWINDOW1,
-              name='htmlWindow1', parent=self, pos=wx.Point(240, 248),
-              size=wx.Size(432, 168), style=wx.html.HW_SCROLLBAR_AUTO)
+              name='htmlWindow1', parent=self, pos=wx.Point(248, 232),
+              size=wx.Size(400, 160), style=wx.VSCROLL)
+        self.htmlWindow1.SetAutoLayout(False)
 
         self.listBox1 = wx.ListBox(choices=[], id=wxID_FRAME1LISTBOX1,
               name='listBox1', parent=self, pos=wx.Point(16, 304),
@@ -178,7 +180,7 @@ class Frame1(wx.Frame):
         
     def OnButton3Button(self, event):
         #vacia el campo Consulta
-        self.textCtrl2.SetValue("Buscar...")
+        self.textCtrl2.SetValue("")
         event.Skip()
             
     def cargaArticulo(self,title):
@@ -192,6 +194,9 @@ class Frame1(wx.Frame):
         #conversion wikicode->html
         html=texto
         html=re.sub(ur"\n", ur"<br />", html)
+        html=re.sub(ur"'''(.*?)'''", ur"<b>\1</b>", html)
+        html=re.sub(ur"''(.*?)''", ur"<i>\1</i>", html)
+        html=re.sub(ur"\[\[(.*?)\]\]", ur"<a href='http://es.wikipedia.org/wiki/\1'>\1</a>", html)
         #rellenamos htmlarea
         self.htmlWindow1.SetPage(html)
         lineas=0
@@ -239,6 +244,6 @@ class Frame1(wx.Frame):
         #pinchando en encontrados.... si pincha en blanco no hace nada
         if self.listBox2.GetStringSelection():
 			self.textCtrl2.SetValue(self.listBox2.GetStringSelection())
-			thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))			
+			thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))
         event.Skip()
         

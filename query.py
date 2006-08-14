@@ -25,5 +25,5 @@ def trurlQuery(userinput):
 
 def fetchQuery(iniciales,project='es',family='wikipedia'):
 	query=[]
-	query=pageQuery('http://'+project+'.'+family+'.org/w/query.php?what=allpages&aplimit=10&apnamespace=0&apfrom='+trurlQuery(iniciales)+'&apfilterredir=nonredirects&format=xml')
+	query=pageQuery('http://'+project+'.'+family+'.org/w/query.php?what=allpages&aplimit=100&apnamespace=0&apfrom='+trurlQuery(iniciales)+'&apfilterredir=nonredirects&format=xml')
 	return query
