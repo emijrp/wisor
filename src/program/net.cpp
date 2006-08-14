@@ -127,3 +127,29 @@ string _net::trurl(const string& userinput) {
              
       return escaped; 
 }       
+
+vector<string> _net::fetchQuery(const string& iniciales, const string& project, const string& family) {
+   return pageQuery((project+"."+family+".org").c_str(), (string("http://")+project+"."+family+".org/w/query.php?what=allpages&aplimit=100&apnamespace=0&apfrom="+trurlQuery(iniciales)+"&apfilterredir=nonredirects&format=xml").c_str());
+}   
+                     
+                     
+#define OpenTitle "<title>"
+#define CloseTitle "</title>"
+
+vector<string> _net::pageQuery(const char* Servidor, const char* url) {               
+           string Text = pageText(Servidor, url);
+           vector<string> vec;
+           char* R = (char*)Text.c_str();
+           char* R2;
+           while(R = strstr(R, OpenTitle)) {
+                 R += sizeof(CloseTitle)-1;
+                 R2 = strstr(R, CloseTitle);              
+                 if(!R2) //No debería pasar. Cada <title> debe tener su </title>
+                        break;
+                 
+                 R2[0] = '\0';
+                 vec.push_back(R);
+                 R = R2 + 1;
+           }
+           return vec;      
+}

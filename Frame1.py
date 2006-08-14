@@ -6,7 +6,7 @@
 
 import wx,thread,re,time
 import wx.html
-import Page,Historial,query #paquete local
+import Page,Historial,query,parse #paquete local
 
 def create(parent):
     return Frame1(parent)
@@ -182,25 +182,25 @@ class Frame1(wx.Frame):
 
     def __init__(self, parent):
         self._init_ctrls(parent)
-	self.p = Page.Page() #Página
-	self.h = Historial.Historial()
-	thread.start_new_thread(self.cargaArticulo,("Portada",))
+        self.p = Page.Page() #Página
+        self.h = Historial.Historial()
+        thread.start_new_thread(self.cargaArticulo,("Portada",))
 
 
-	# MANEJO DE EVENTOS
+        # MANEJO DE EVENTOS
 
 
     def OnButton1LeftUp(self, event):
         #carga el articulo escrito en el campo Buscar al pulsar OK
         if self.textCtrl2.GetValue()!="Buscar...":
-			thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))
+                        thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))
         event.Skip()
 
     def OnTextCtrl2TextEnter(self, event):
         #carga el articulo escrito en el campo Buscar al pulsar Intro
-		if self.textCtrl2.GetValue()!="Buscar...":
-			thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))
-		event.Skip()
+                if self.textCtrl2.GetValue()!="Buscar...":
+                        thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))
+                event.Skip()
         
     def OnButton3Button(self, event):
         #vacia el campo Consulta
@@ -208,34 +208,26 @@ class Frame1(wx.Frame):
         event.Skip()
             
     def cargaArticulo(self,title):
-	t=time.time()
-	self.h.push(title)
+        t=time.time()
+        self.h.push(title)
         self.staticText1.SetLabel(title)
         self.p.changePage(title)
         texto=self.p.getText()
         #rellenamos textarea
         self.textCtrl1.SetValue(texto)
         #conversion wikicode->html
-        html=texto
+        html=parse.pageParse(texto)
         
-        html=re.sub(ur"\n", ur"<br />", html)
-        html=re.sub(ur"'''(.*?)'''", ur"<b>\1</b>", html)
-        html=re.sub(ur"''(.*?)''", ur"<i>\1</i>", html)
-        html=re.sub(ur"^===(.*?)===", ur"<h3>\1</h3>", html)
-        html=re.sub(ur"^==(.*?)==", ur"<h2>\1</h2>", html)
-        html=re.sub(ur"^=(.*?)=", ur"<h1>\1</h1>", html)
-                
-        html=re.sub(ur"\[\[(.*?)\]\]", ur"<a href='http://es.wikipedia.org/wiki/\1'>\1</a>", html)
         #rellenamos htmlarea
         self.htmlWindow1.SetPage(html)
         lineas=0
         palabras=0
         caracteres=0
         #actualiza historial de consultas
-	self.listBox1.InsertItems(self.h.dame(), 0)
-	#barra de estado
-	status=u'Artículo cargado en %s segundos | Bytes: %s | Líneas: %s | Palabras: %s | Caracteres: %s ' % (time.time()-t, self.p.getLen(), lineas, palabras, caracteres)
-	self.statusBar1.SetStatusText(number=0, text=status)
+        self.listBox1.InsertItems(self.h.dame(), 0)
+        #barra de estado
+        status=u'Artículo cargado en %s segundos | Bytes: %s | Líneas: %s | Palabras: %s | Caracteres: %s ' % (time.time()-t, self.p.getLen(), lineas, palabras, caracteres)
+        self.statusBar1.SetStatusText(number=0, text=status)
 
     def OnMenuFileItems0Menu(self, event):
         #sale del programa
@@ -249,16 +241,16 @@ class Frame1(wx.Frame):
         event.Skip()
         
     def OnButton4Button(self, event):
-		#vacia el historial y se carga el archivo
-			self.listBox1.Set("", )
-			self.h.limpia()
-			event.Skip()
+                #vacia el historial y se carga el archivo
+                        self.listBox1.Set("", )
+                        self.h.limpia()
+                        event.Skip()
 
     def OnListBox1LeftUp(self, event):
-		#pinchando en el historial.... si pincha en blanco no hace nada
+                #pinchando en el historial.... si pincha en blanco no hace nada
         if self.listBox1.GetStringSelection():
-			self.textCtrl2.SetValue(self.listBox1.GetStringSelection())
-			thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))			
+                        self.textCtrl2.SetValue(self.listBox1.GetStringSelection())
+                        thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))                        
         event.Skip()
 
     def OnTextCtrl2Text(self, event):
@@ -273,7 +265,7 @@ class Frame1(wx.Frame):
     def OnListBox2LeftUp(self, event):
         #pinchando en encontrados.... si pincha en blanco no hace nada
         if self.listBox2.GetStringSelection():
-			self.textCtrl2.SetValue(self.listBox2.GetStringSelection())
-			thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))
+                        self.textCtrl2.SetValue(self.listBox2.GetStringSelection())
+                        thread.start_new_thread(self.cargaArticulo,(self.textCtrl2.GetValue(),))
         event.Skip()
         
