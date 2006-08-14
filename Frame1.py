@@ -6,7 +6,7 @@
 
 import wx,thread,re,time
 import wx.html
-import Page,Historial,query,parse #paquete local
+import Page,Historial,net,parse #paquete local
 
 def create(parent):
     return Frame1(parent)
@@ -186,6 +186,36 @@ class Frame1(wx.Frame):
         self.h = Historial.Historial()
         thread.start_new_thread(self.cargaArticulo,("Portada",))
 
+	# FUNCIONES PARA CARGAR CAJITAS (threads)
+	
+    def cargaArticulo(self,title):
+        t=time.time()
+        self.h.push(title)
+        self.staticText1.SetLabel(title)
+        self.p.changePage(title)
+        texto=self.p.getText()
+        #rellenamos textarea
+        self.textCtrl1.SetValue(texto)
+        #conversion wikicode->html
+        html=parse.pageParse(texto)
+        #rellenamos htmlarea
+        self.htmlWindow1.SetPage(html)
+        lineas=0
+        palabras=0
+        caracteres=0
+        #actualiza historial de consultas
+        self.listBox1.InsertItems(self.h.dame(), 0)
+        #barra de estado
+        status=u'Artículo cargado en %s segundos | Bytes: %s | Líneas: %s | Palabras: %s | Caracteres: %s ' % (time.time()-t, self.p.getLen(), lineas, palabras, caracteres)
+        self.statusBar1.SetStatusText(number=0, text=status)
+
+    def cargaDinamica(self):
+        if self.checkBox1.GetValue():
+            encontrados=[]
+            self.listBox2.Set("", )
+            encontrados=net.fetchprefindex(self.textCtrl2.GetValue(),"es","wikipedia")
+            self.listBox2.InsertItems(encontrados, 0)
+
 
         # MANEJO DE EVENTOS
 
@@ -207,27 +237,6 @@ class Frame1(wx.Frame):
         self.textCtrl2.SetValue("")
         event.Skip()
             
-    def cargaArticulo(self,title):
-        t=time.time()
-        self.h.push(title)
-        self.staticText1.SetLabel(title)
-        self.p.changePage(title)
-        texto=self.p.getText()
-        #rellenamos textarea
-        self.textCtrl1.SetValue(texto)
-        #conversion wikicode->html
-        html=parse.pageParse(texto)
-        
-        #rellenamos htmlarea
-        self.htmlWindow1.SetPage(html)
-        lineas=0
-        palabras=0
-        caracteres=0
-        #actualiza historial de consultas
-        self.listBox1.InsertItems(self.h.dame(), 0)
-        #barra de estado
-        status=u'Artículo cargado en %s segundos | Bytes: %s | Líneas: %s | Palabras: %s | Caracteres: %s ' % (time.time()-t, self.p.getLen(), lineas, palabras, caracteres)
-        self.statusBar1.SetStatusText(number=0, text=status)
 
     def OnMenuFileItems0Menu(self, event):
         #sale del programa
@@ -255,11 +264,7 @@ class Frame1(wx.Frame):
 
     def OnTextCtrl2Text(self, event):
         #cargamos lista de encontrados
-        if self.checkBox1.GetValue():
-            encontrados=[]
-            self.listBox2.Set("", )
-            encontrados=query.fetchQuery(self.textCtrl2.GetValue(),"es","wikipedia")
-            self.listBox2.InsertItems(encontrados, 0)
+	thread.start_new_thread(self.cargaDinamica,())
         event.Skip()
 
     def OnListBox2LeftUp(self, event):

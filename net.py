@@ -9,7 +9,7 @@
 #TODO: el Special:Random
 
 
-import urllib, urllib2, httplib
+import urllib, urllib2, httplib,re
 
 def pageText(url):
     request=urllib2.Request(url)
@@ -27,3 +27,11 @@ def trurl(userinput):
 def fetch(pagina,project='es',family='wikipedia'):
 	raw=pageText('http://'+project+'.'+family+'.org/w/index.php?title='+trurl(pagina)+'&action=raw')
 	return raw
+
+def fetchprefindex(iniciales,project='es',family='wikipedia'):
+	text=pageText('http://'+project+'.'+family+'.org/w/query.php?what=allpages&aplimit=100&apnamespace=0&apfrom='+trurl(iniciales)+'&apfilterredir=nonredirects&format=xml')
+	m=re.compile(ur"<title>(.*?)</title>").finditer(text)
+	encontrados=[]
+	for i in m:
+		encontrados.append(i.group(1))
+	return encontrados
