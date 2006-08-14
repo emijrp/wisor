@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import wx,thread,re,time
 import wx.html
-import Page,Historial,query
+import Page,Historial
 
 def pageParse(texto):
         html=texto
