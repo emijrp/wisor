@@ -6,9 +6,7 @@
 
 import wx,thread,re,time
 import wx.html
-import Page,Historial,net,parse #paquete local
-
-import urllib2
+import Page,Historial,net #paquete local
 
 def create(parent):
     return Frame1(parent)
@@ -194,18 +192,17 @@ class Frame1(wx.Frame):
         t=time.time()
         self.h.push(title)
         self.staticText1.SetLabel(title)
-	try:
-        	self.p.changePage(title)
-	except urllib2.HTTPError:
-		d=wx.MessageDialog(self, u"A tomar por culo ya ostia", u"Yo he venido aquí a hablar de mi libro", wx.OK)
-        	d.ShowModal()
-        	d.Destroy()
-		return
+        self.p.changePage(title)
+	if self.p.getError():
+                d=wx.MessageDialog(self, u"A tomar por culo ya ostia", u"Yo he venido aquí a hablar de mi libro", wx.OK)
+                d.ShowModal()
+                d.Destroy()
+                return
         texto=self.p.getText()
         #rellenamos textarea
         self.textCtrl1.SetValue(texto)
         #conversion wikicode->html
-        html=parse.pageParse(texto)
+        html=self.p.pageHtmlText()
         #rellenamos htmlarea
         self.htmlWindow1.SetPage(html)
         lineas=0
@@ -216,6 +213,7 @@ class Frame1(wx.Frame):
         #barra de estado
         status=u'Artículo cargado en %s segundos | Bytes: %s | Líneas: %s | Palabras: %s | Caracteres: %s ' % (time.time()-t, self.p.getLen(), lineas, palabras, caracteres)
         self.statusBar1.SetStatusText(number=0, text=status)
+
 
     def cargaDinamica(self):
         if self.checkBox1.GetValue():
