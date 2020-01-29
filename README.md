@@ -4,4 +4,4 @@ El objetivo es hacer un lector de artículos de Wikipedia que libere la carga de
 
 ## Enlaces externos
 
-http://de.wikipedia.org/wiki/Benutzer:Danimo/Knowledge
+https://de.wikipedia.org/wiki/Benutzer:Danimo/Knowledge
